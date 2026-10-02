@@ -3,33 +3,321 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>メンカラメンタル診断</title>
+<title>メンカラメンタル診断 ♡</title>
 <meta name="description" content="担当（推し）のメンカラとあなたのメンタルとの共鳴タイプを診断します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f7f5f2;--card:#fff;--text:#262321;--muted:#716b66;--line:#e5dfd9;--accent:#6c5ce7}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;line-height:1.7}
-main{max-width:720px;margin:auto;padding:28px 16px 56px}.hero,.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;margin-bottom:16px;box-shadow:0 4px 18px rgba(0,0,0,.035)}
-h1{font-size:28px;margin:0 0 8px}.lead{color:var(--muted);margin:0}.qnum{font-size:13px;color:var(--accent);font-weight:700}.question{font-size:19px;font-weight:700;margin:4px 0 14px}
-.option{display:block;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:9px 0;cursor:pointer;background:#fff}
-.option:has(input:checked){border-color:var(--accent);background:#f3f1ff}.option input{margin-right:8px}
-button{border:0;border-radius:14px;padding:13px 16px;font-size:15px;font-weight:700;cursor:pointer;background:#262321;color:#fff}
-button.secondary{background:#eeeae6;color:#262321}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.hidden{display:none}.error{color:#a33b3b;font-size:14px;margin-top:8px}.result-code{color:var(--muted);font-size:13px}
-.result-title{font-size:25px;line-height:1.35;margin:4px 0 12px}.tagline{font-weight:700}.meaning{border-left:4px solid var(--accent);padding:10px 14px;background:#f6f4ff;border-radius:8px;margin-top:16px}
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:14px;background:#f7f5f2;border-radius:14px}.stat strong{font-size:20px;display:block}
-.small{font-size:13px;color:var(--muted)}a{color:inherit}
-footer{color:var(--muted);font-size:12px;text-align:center;margin-top:20px}
+:root {
+  --bg-gradient: linear-gradient(135deg, #ffeef8 0%, #f0e6ff 50%, #e8f3ff 100%);
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --text-main: #5c4974;
+  --text-muted: #8c7b9e;
+  --accent-pink: #ff75ac;
+  --accent-purple: #9b61f8;
+  --accent-soft: #f8e1ee;
+  --line-color: #f2dbee;
+  --shadow-soft: 0 10px 25px rgba(210, 160, 215, 0.2);
+  --shadow-btn: 0 6px 16px rgba(255, 117, 172, 0.35);
+  --font-family: 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-main);
+  font-family: var(--font-family);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+main {
+  max-width: 680px;
+  margin: auto;
+  padding: 32px 16px 64px;
+}
+
+.hero {
+  text-align: center;
+  background: var(--card-bg);
+  border: 3px solid #ffffff;
+  border-radius: 28px;
+  padding: 32px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+
+.hero::before {
+  content: "✨ ♡ 🎀 ♡ ✨";
+  display: block;
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: var(--accent-pink);
+  margin-bottom: 8px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 3px solid #ffffff;
+  border-radius: 24px;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 10px;
+  background: linear-gradient(45deg, var(--accent-pink), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lead {
+  color: var(--text-muted);
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.qnum {
+  display: inline-block;
+  font-size: 12px;
+  background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+  color: #fff;
+  font-weight: 800;
+  padding: 3px 12px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.question {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 4px 0 16px;
+  color: var(--text-main);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--line-color);
+  border-radius: 18px;
+  padding: 14px 18px;
+  margin: 10px 0;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.option:hover {
+  border-color: var(--accent-pink);
+  transform: translateY(-2px);
+  background: #fff;
+}
+
+.option:has(input:checked) {
+  border-color: var(--accent-pink);
+  background: #fff5f9;
+  box-shadow: 0 4px 12px rgba(255, 117, 172, 0.15);
+}
+
+.option input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  margin-right: 12px;
+  outline: none;
+  position: relative;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.option input:checked {
+  border-color: var(--accent-pink);
+  background-color: var(--accent-pink);
+}
+
+.option input:checked::after {
+  content: "♡";
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+}
+
+button {
+  width: 100%;
+  border: 0;
+  border-radius: 50px;
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff75ac, #9b61f8);
+  color: #fff;
+  box-shadow: var(--shadow-btn);
+  transition: all 0.25s ease;
+  letter-spacing: 0.5px;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 117, 172, 0.45);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button.secondary {
+  background: #ffffff;
+  color: var(--text-main);
+  border: 2px solid var(--line-color);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+button.secondary:hover {
+  background: #faf7fc;
+  border-color: var(--accent-purple);
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.hidden { display: none; }
+
+.error {
+  color: #e84118;
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 10px;
+  text-align: center;
+  background: #ffe6e6;
+  padding: 8px 12px;
+  border-radius: 12px;
+}
+
+.result-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.result-code {
+  color: var(--accent-purple);
+  font-size: 14px;
+  font-weight: 800;
+  background: #f0e6ff;
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.result-title {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.35;
+  margin: 8px 0;
+  color: var(--text-main);
+}
+
+.tagline {
+  font-weight: 800;
+  color: var(--accent-pink);
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.meaning {
+  border: 2px dashed var(--accent-pink);
+  padding: 16px 18px;
+  background: #fff9fc;
+  border-radius: 18px;
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.meaning strong {
+  color: var(--accent-pink);
+  font-size: 16px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.stat {
+  padding: 14px;
+  background: #fbf8ff;
+  border: 2px solid #f0e6ff;
+  border-radius: 18px;
+  text-align: center;
+}
+
+.stat strong {
+  font-size: 22px;
+  display: block;
+  color: var(--accent-purple);
+  font-weight: 800;
+}
+
+.small {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+footer {
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+  margin-top: 28px;
+  line-height: 1.6;
+}
+
+@media (min-width: 480px) {
+  .buttons {
+    flex-direction: row;
+  }
+}
 </style>
 </head>
 <body>
 <main>
 <section class="hero">
-<h1>メンカラメンタル診断</h1>
-<p class="lead">今からあなたの担当（推し）のメンカラとあなたのメンタルとの共鳴タイプを診断します。</p>
+<h1>メンカラメンタル診断 ♡</h1>
+<p class="lead">担当（推し）のメンカラとあなたのメンタルとの<br>共鳴タイプを診断します✨</p>
 </section>
 
 <div id="app"></div>
-<footer>この診断では、診断結果の統計に必要な回答データを匿名で集計します。名前やメールアドレスは収集しません。</footer>
+<footer>この診断では、診断結果の統計に必要な回答データを匿名で集計します。<br>名前やメールアドレスは収集しません。</footer>
 </main>
 
 <script>
@@ -79,9 +367,6 @@ function validate(a){
  if(a.q2>=4 && !a.extra) return "苦手になった理由も選んでください。";
  return "";
 }
-/* 16タイプ判定:
-   Q1/Q2/Q3で色そのものの変化、Q4/Q5で担当（推し）との結びつきを測る。
-   Q2=4/5はメインタイプを維持し、別軸のサブタイプとして記録。 */
 function calc(a){
  const q1=a.q1,q2=a.q2,q3=a.q3,q4=a.q4,q5=a.q5;
  if(q1<=2){
@@ -105,14 +390,19 @@ function calc(a){
  return "15";
 }
 function typePage(code, sub){
- const t=TYPES[code]; const shareText=`メンカラメンタル診断をやってみた！「${t[0]}」でした。 #メンカラメンタル診断`;
- const url=location.origin+location.pathname+"?result="+code+(sub?`&sub=${sub}`:"");
+ const t=TYPES[code];
  return `<section class="card">
- <div class="result-code">診断結果 ${code}</div><h2 class="result-title">${t[0]}</h2><p class="tagline">${t[1]}</p><p>${t[2]}</p>
- <div class="meaning"><strong>あなたにとってメンカラとは？</strong><br>→ ${t[3]}</div>
- ${sub?`<div class="meaning"><strong>メンカラ変化タイプ</strong><br>${SUB[sub][0]}<br>${SUB[sub][1]}</div>`:""}
+ <div class="result-header">
+   <div class="result-code">TYPE ${code}</div>
+   <h2 class="result-title">${t[0]}</h2>
+ </div>
+ <p class="tagline">「 ${t[1]} 」</p>
+ <p>${t[2]}</p>
+ <div class="meaning"><strong>💖 あなたにとってメンカラとは？</strong><br>→ ${t[3]}</div>
+ ${sub?`<div class="meaning"><strong>⚡️️ メンカラ変化タイプ</strong><br><strong>${SUB[sub][0]}</strong><br>${SUB[sub][1]}</div>`:""}
  <div class="buttons">
- <button onclick="shareX()">Xでシェア</button><button class="secondary" onclick="copyResult()">結果リンクをコピー</button>
+ <button onclick="shareX()">X (旧Twitter) で投稿する</button>
+ <button class="secondary" onclick="copyResult()">結果のリンクをコピー</button>
  <button class="secondary" onclick="showStats()">みんなの結果を見る</button>
  </div>
  </section><div id="stats"></div>`;
@@ -120,32 +410,52 @@ function typePage(code, sub){
 let currentCode="", currentSub="";
 function renderQuiz(){
  let h=`<form id="quiz">`;
- QUESTIONS.forEach(([id,title,opts],i)=>{h+=`<section class="card"><div class="qnum">${i+1}/5</div><div class="question">${title}</div>`+opts.map((x,j)=>`<label class="option"><input type="radio" name="${id}" value="${j+1}">${j+1}．${x}</label>`).join("")+`</section>`});
- h+=`<section class="card hidden" id="extraCard"><div class="qnum">追加質問</div><div class="question">${EXTRA[1]}</div>`+EXTRA[2].map((x,j)=>`<label class="option"><input type="radio" name="extra" value="${j+1}">${j+1}．${x}</label>`).join("")+`</section>`;
- h+=`<div class="card"><div id="error" class="error"></div><button type="submit">診断結果を見る</button></div></form>`;
+ QUESTIONS.forEach(([id,title,opts],i)=>{
+   h+=`<section class="card"><div class="qnum">QUESTION ${i+1}</div><div class="question">${title}</div>`+
+   opts.map((x,j)=>`<label class="option"><input type="radio" name="${id}" value="${j+1}"><span>${j+1}．${x}</span></label>`).join("")+
+   `</section>`;
+ });
+ h+=`<section class="card hidden" id="extraCard"><div class="qnum">CHECK</div><div class="question">${EXTRA[1]}</div>`+
+ EXTRA[2].map((x,j)=>`<label class="option"><input type="radio" name="extra" value="${j+1}"><span>${j+1}．${x}</span></label>`).join("")+
+ `</section>`;
+ h+=`<div class="card"><div id="error" class="error hidden"></div><button type="submit">診断結果を見る ✨</button></div></form>`;
  document.getElementById("app").innerHTML=h;
  document.querySelectorAll('input[name="q2"]').forEach(el=>el.addEventListener("change",()=>document.getElementById("extraCard").classList.toggle("hidden",Number(el.value)<4)));
- document.getElementById("quiz").addEventListener("submit",e=>{e.preventDefault();const a=getAnswers(),err=validate(a);if(err){document.getElementById("error").textContent=err;return;}const code=calc(a);const sub=a.q2>=4?a.extra:"";showResult(code,sub,a);});
+ document.getElementById("quiz").addEventListener("submit",e=>{
+   e.preventDefault();
+   const a=getAnswers(),err=validate(a);
+   const errEl = document.getElementById("error");
+   if(err){
+     errEl.textContent=err;
+     errEl.classList.remove("hidden");
+     return;
+   }
+   errEl.classList.add("hidden");
+   const code=calc(a);
+   const sub=a.q2>=4?a.extra:"";
+   showResult(code,sub,a);
+ });
 }
 function showResult(code,sub,a){
  currentCode=code;currentSub=sub;history.replaceState({}, "", "?result="+code+(sub?`&sub=${sub}`:""));
  document.getElementById("app").innerHTML=typePage(code,sub);
  if(API_URL) sendStats(a,code,sub);
+ window.scrollTo({top:0, behavior:'smooth'});
 }
 async function sendStats(a,code,sub){
  try{await fetch(API_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({q1:a.q1,q2:a.q2,q3:a.q3,q4:a.q4,q5:a.q5,extra:a.extra||null,resultType:code,subType:sub||null,createdAt:new Date().toISOString().slice(0,10)})});}catch(e){}
 }
-function shareX(){const t=TYPES[currentCode];const u=encodeURIComponent(location.href);const tx=encodeURIComponent(`メンカラメンタル診断をやってみた！「${t[0]}」でした。 #メンカラメンタル診断`);window.open(`https://twitter.com/intent/tweet?text=${tx}&url=${u}`,"_blank");}
-async function copyResult(){try{await navigator.clipboard.writeText(location.href);alert("結果リンクをコピーしました。");}catch(e){prompt("このリンクをコピーしてください",location.href)}}
+function shareX(){const t=TYPES[currentCode];const u=encodeURIComponent(location.href);const tx=encodeURIComponent(`メンカラメンタル診断をやってみた！「${t[0]}」でした✨ #メンカラメンタル診断`);window.open(`https://twitter.com/intent/tweet?text=${tx}&url=${u}`,"_blank");}
+async function copyResult(){try{await navigator.clipboard-writeText(location.href);alert("結果リンクをコピーしました！");}catch(e){prompt("このリンクをコピーしてください",location.href)}}
 async function showStats(){
- const el=document.getElementById("stats");el.innerHTML=`<section class="card"><h2>みんなの結果</h2><p class="small">統計データを読み込んでいます。</p></section>`;
+ const el=document.getElementById("stats");el.innerHTML=`<section class="card"><h2>みんなの結果</h2><p class="small">統計データを読み込んでいます...</p></section>`;
  if(!API_URL){el.innerHTML=`<section class="card"><h2>みんなの結果</h2><p>統計機能を使うには、Google Apps Scriptの公開URLを設定してください。</p></section>`;return;}
  try{const r=await fetch(API_URL+"?action=stats");const d=await r.json();renderStats(d)}catch(e){el.innerHTML=`<section class="card"><h2>みんなの結果</h2><p>統計データを読み込めませんでした。</p></section>`}
 }
 function renderStats(d){
- const total=d.total||0;let h=`<section class="card"><h2>みんなの結果</h2><p>現在 <strong>${total.toLocaleString()}</strong>人が診断しました。</p><div class="stat-grid">`;
+ const total=d.total||0;let h=`<section class="card"><h2>みんなの結果</h2><p>現在 <strong>${total.toLocaleString()}</strong> 人が診断しました！</p><div class="stat-grid">`;
  Object.entries(d.results||{}).forEach(([code,n])=>h+=`<div class="stat"><strong>${total?Math.round(n/total*1000)/10:0}%</strong>${code}｜${TYPES[code]?.[0]||code}<br><span class="small">${n.toLocaleString()}人</span></div>`);
- h+=`</div><p class="small">回答データは診断結果の集計に使用しています。</p></section>`;document.getElementById("stats").innerHTML=h;
+ h+=`</div><p class="small" style="margin-top:12px;">回答データは診断結果の集計に使用しています。</p></section>`;document.getElementById("stats").innerHTML=h;
 }
 function load(){
  const p=new URLSearchParams(location.search),code=p.get("result"),sub=p.get("sub");
@@ -154,4 +464,5 @@ function load(){
 }
 load();
 </script>
-</body></html>
+</body>
+</html>
