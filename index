@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>メンカラメンタル診断 ♡</title>
+<meta name="description" content="担当（推し）のメンカラとあなたのメンタルとの共鳴タイプを診断します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-gradient: linear-gradient(135deg, #ffeef8 0%, #f0e6ff 50%, #e8f3ff 100%);
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --text-main: #5c4974;
+  --text-muted: #8c7b9e;
+  --accent-pink: #ff75ac;
+  --accent-purple: #9b61f8;
+  --accent-soft: #f8e1ee;
+  --line-color: #f2dbee;
+  --shadow-soft: 0 10px 25px rgba(210, 160, 215, 0.2);
+  --shadow-btn: 0 6px 16px rgba(255, 117, 172, 0.35);
+  --font-family: 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-main);
+  font-family: var(--font-family);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+main {
+  max-width: 680px;
+  margin: auto;
+  padding: 32px 16px 64px;
+}
+
+.hero {
+  text-align: center;
+  background: var(--card-bg);
+  border: 3px solid #ffffff;
+  border-radius: 28px;
+  padding: 32px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+
+.hero::before {
+  content: "✨ ♡ 🎀 ♡ ✨";
+  display: block;
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: var(--accent-pink);
+  margin-bottom: 8px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 3px solid #ffffff;
+  border-radius: 24px;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 10px;
+  background: linear-gradient(45deg, var(--accent-pink), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lead {
+  color: var(--text-muted);
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.qnum {
+  display: inline-block;
+  font-size: 12px;
+  background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+  color: #fff;
+  font-weight: 800;
+  padding: 3px 12px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.question {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 4px 0 16px;
+  color: var(--text-main);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--line-color);
+  border-radius: 18px;
+  padding: 14px 18px;
+  margin: 10px 0;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.option:hover {
+  border-color: var(--accent-pink);
+  transform: translateY(-2px);
+  background: #fff;
+}
+
+.option:has(input:checked) {
+  border-color: var(--accent-pink);
+  background: #fff5f9;
+  box-shadow: 0 4px 12px rgba(255, 117, 172, 0.15);
+}
+
+.option input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  margin-right: 12px;
+  outline: none;
+  position: relative;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.option input:checked {
+  border-color: var(--accent-pink);
+  background-color: var(--accent-pink);
+}
+
+.option input:checked::after {
+  content: "♡";
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+}
+
+button {
+  width: 100%;
+  border: 0;
+  border-radius: 50px;
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff75ac, #9b61f8);
+  color: #fff;
+  box-shadow: var(--shadow-btn);
+  transition: all 0.25s ease;
+  letter-spacing: 0.5px;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 117, 172, 0.45);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button.secondary {
+  background: #ffffff;
+  color: var(--text-main);
+  border: 2px solid var(--line-color);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+button.secondary:hover {
+  background: #faf7fc;
+  border-color: var(--accent-purple);
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.hidden { display: none; }
+
+.error {
+  color: #e84118;
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 10px;
+  text-align: center;
+  background: #ffe6e6;
+  padding: 8px 12px;
+  border-radius: 12px;
+}
+
+.result-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.result-code {
+  color: var(--accent-purple);
+  font-size: 14px;
+  font-weight: 800;
+  background: #f0e6ff;
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.result-title {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.35;
+  margin: 8px 0;
+  color: var(--text-main);
+}
+
+.tagline {
+  font-weight: 800;
+  color: var(--accent-pink);
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.meaning {
+  border: 2px dashed var(--accent-pink);
+  padding: 16px 18px;
+  background: #fff9fc;
+  border-radius: 18px;
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.meaning strong {
+  color: var(--accent-pink);
+  font-size: 16px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.stat {
+  padding: 14px;
+  background: #fbf8ff;
+  border: 2px solid #f0e6ff;
+  border-radius: 18px;
+  text-align: center;
+}
+
+.stat strong {
+  font-size: 22px;
+  display: block;
+  color: var(--accent-purple);
+  font-weight: 800;
+}
+
+.small {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+footer {
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+  margin-top: 28px;
+  line-height: 1.6;
+}
+
+@media (min-width: 480px) {
+  .buttons {
+    flex-direction: row;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+<section class="hero">
+<h1>メンカラメンタル診断 ♡</h1>
+<p class="lead">担当（推し）のメンカラとあなたのメンタルとの<br>共鳴タイプを診断します✨</p>
+</section>
+
+<div id="app"></div>
+<footer>この診断では、診断結果の統計に必要な回答データを匿名で集計します。<br>名前やメールアドレスは収集しません。</footer>
+</main>
+
+<script>
+const API_URL = ""; // Google Apps Script公開URLをここに設定
+const TYPES = {
+"01": ["運命の色一致型","好きな色とメンカラが一致した、奇跡の人","もともと好きだった色が、偶然担当（推し）のメンカラだったあなた。「この色が好き」と「この人が好き」が最初から重なっているため、メンカラへの愛着もかなり強め。","運命の証"],
+"02": ["メンカラプレミア化型","好きな色に担当（推し）という付加価値がついた人","もともと好きだった色だけど、担当（推し）のメンカラになったことでさらに特別な存在に。街中でその色を見るだけで担当（推し）を思い出すこともありそう。","好きな色＋担当（推し）＝最強"],
+"03": ["メンカラ沼深化型","好きだった色が、担当（推し）によってもっと好きになった人","もともと好きだったところに、衣装・グッズ・写真・ライブなどで大量のメンカラを浴びた結果、さらに好きになったタイプ。","担当（推し）によって深まった愛"],
+"04": ["メンカラ永久保存型","この色だけは、いつまでも担当（推し）の色","色そのものも好きだけど、それ以上に「担当（推し）の色」という意味が強いタイプ。もし担当を降りたとしても、その色を見るとちょっと思い出してしまうかも。","思い出を保存する色"],
+"05": ["新境地開拓型","担当（推し）のおかげで新しい色の魅力を知った人","もともとは特に好きでも嫌いでもなかったけれど、担当（推し）をきっかけにその色の魅力を発見。今では担当（推し）抜きでも「この色、結構いいな」と思えるタイプ。","担当（推し）が教えてくれた新しい世界"],
+"06": ["メンカラ信仰型","色が好きなんじゃない。担当（推し）の色だから好き。","色そのものへの興味よりも、「担当（推し）の色」という意味に強く反応するタイプ。他の人が同じ色を担当していても、あなたの中ではやっぱり「担当（推し）の色」。","担当（推し）そのもの"],
+"07": ["色彩侵食型","見すぎて、いつの間にか好きになっていた人","最初は何とも思っていなかったのに、担当（推し）の写真、衣装、グッズ、ペンライト……とにかくメンカラを浴び続けた結果、気づけばその色が好きになっていたタイプ。","知らないうちに染み込んだ色"],
+"08": ["オタ活限定愛好型","普段は選ばない。でも担当（推し）なら話は別。","日常生活では特にその色を選ばないのに、オタ活になると急にその色がしっくりくるタイプ。「普段の自分」と「オタクの自分」で色の好みがちょっと違うかも。","オタ活専用カラー"],
+"09": ["生粋の色オタク型","担当（推し）がいなくても、その色が好き。","担当（推し）の存在とは関係なく、純粋にその色そのものが好きなタイプ。担当（推し）がその色じゃなくなったとしても、たぶんその色を好きでい続ける。","純粋な好み"],
+"10": ["メンカラ日常化型","気づけば生活にメンカラがいる。","もともとの色の好みと担当（推し）の影響が合わさって、服・小物・ネイル・スマホケースなど、日常生活にもその色が自然と入り込んでいるタイプ。","生活の一部"],
+"11": ["色単体推し型","担当（推し）とは別に、この色が好き。","担当（推し）のメンカラであることは嬉しいけれど、色への好意はあくまで色への好意。「担当（推し）がこの色だから好き」ではなく、「この色が好きだし、担当（推し）もこの色で嬉しい」というタイプ。","担当（推し）とは独立した好き"],
+"12": ["メンカラ聖域型","この色は、担当（推し）のための特別枠。","普段から色そのものが好きだけど、担当（推し）のメンカラになると意味が変わるタイプ。同じ色でも「普段の色」と「担当（推し）の色」は別物。","聖域"],
+"13": ["後天的カラー愛型","嫌いだった色まで、担当（推し）のために好きになった。","もともとはあまり好きではなかった、あるいは苦手だった色。それなのに担当（推し）を追い続けるうちに、いつの間にか「この色、意外と好きかも」と思うようになったタイプ。","担当（推し）が変えた色の好み"],
+"14": ["メンカラ定着型","好きなのは色じゃなくて担当（推し）。でも色も定着した。","色そのものに強いこだわりがあるわけではないのに、オタ活をしているうちに自然とその色を身につけたり選んだりするようになったタイプ。","オタ活の習慣"],
+"15": ["色と担当（推し）の分離型","担当（推し）は担当（推し）、色は色。","担当（推し）は大好き。でもメンカラを見ても必ずしも担当（推し）を連想するわけではないタイプ。「この色＝担当（推し）！」という結びつきは比較的ゆるめ。","担当（推し）とは別ジャンル"],
+"16": ["メンカラ一点集中型","色そのものより、“担当（推し）の色”であることが大事。","その色自体には特別な思い入れはないけれど、担当（推し）の色としては大切。担当（推し）が別の色になったら、その新しい色にも気持ちが移る可能性が高いタイプ。","担当（推し）を示す目印"]
+};
+const SUB = {
+4:["メンカラ反転型","好きだったはずなのに、見すぎて苦手になった"],
+5:["メンカラ飽和型","グッズも衣装も何もかもその色。もうお腹いっぱい。"],
+3:["メンカラ複雑型","その色を見ると担当（推し）を思い出す。でも、今はちょっと複雑。"],
+6:["メンカラ理由不明型","特に理由はないけど、気づいたら苦手になった。"],
+7:["メンカラその他型","その色が苦手になった理由は、ほかにある。"]
+};
+
+const QUESTIONS = [
+["q1","Q1. 担当（推し）になる前、その色は？",["大好きだった","好きだった","特に何とも思ってなかった","あまり好きじゃなかった","苦手・嫌いだった"]],
+["q2","Q2. 担当（推し）のメンカラだと知ってから、その色への気持ちは？",["もっと好きになった","少し好きになった","特に変わらない","少し苦手になった","むしろ嫌いになった"]],
+["q3","Q3. 今、その色を担当（推し）抜きで見たら？",["普通に好き","まあまあ好き","特に何とも思わない","あまり好きじゃない","やっぱり苦手"]],
+["q4","Q4. 街中でメンカラを見つけたら？",["「担当（推し）だ！！」ってなる","ちょっと嬉しくなる","特に何も思わない","担当（推し）を連想するけど、ちょっと複雑","できれば見たくない"]],
+["q5","Q5. 担当（推し）が別のメンカラになったら？",["今のメンカラも好きだし、新しい色も好きになると思う","今のメンカラへの愛着は残る","担当（推し）の色なら何色でも好きになると思う","今のメンカラだからこそ好きなので、ちょっと寂しい","むしろ別の色になってほしい"]]
+];
+const EXTRA=["extra","どうしてその色が苦手になったと思う？",["見すぎて飽きた","グッズなどで大量に見て疲れた","「担当（推し）の色」というイメージが強くなりすぎた","元々好きだったのに、担当（推し）の色として扱われるのが嫌になった","担当（推し）との思い出がその色に結びついている","特に理由はないけど苦手になった","その他"]];
+
+function getAnswers(){
+ const a={}; QUESTIONS.forEach(([id])=>a[id]=Number(document.querySelector(`input[name="${id}"]:checked`)?.value||0));
+ if(a.q2>=4) a.extra=Number(document.querySelector('input[name="extra"]:checked')?.value||0);
+ return a;
+}
+function validate(a){
+ for(const [id] of QUESTIONS) if(!a[id]) return "すべての質問に回答してください。";
+ if(a.q2>=4 && !a.extra) return "苦手になった理由も選んでください。";
+ return "";
+}
+function calc(a){
+ const q1=a.q1,q2=a.q2,q3=a.q3,q4=a.q4,q5=a.q5;
+ if(q1<=2){
+   if(q2===1 && q4===1) return q1===1 && q3<=2 ? "01":"03";
+   if(q2<=2 && q4<=2) return q5===2 ? "02":"03";
+   if(q2===3 && q4>=3) return q4===3 ? "09":"11";
+   if(q4===1) return "12";
+   return q5===2 ? "04":"11";
+ }
+ if(q1===3){
+   if(q2<=2 && q3<=2) return q4===1 ? "07":"05";
+   if(q2<=2 && q3>=3) return q4<=2 ? "06":"08";
+   if(q2===3) return q4===1 ? "16":(q5===2 ? "14":"08");
+   return q4<=2 ? "06":"15";
+ }
+ if(q1>=4){
+   if(q2<=2 && q3<=2) return q4===1 ? "13":"05";
+   if(q2===3) return q4<=2 ? "14":"15";
+   if(q2>=4) return q4<=2 ? "06":"16";
+ }
+ return "15";
+}
+function typePage(code, sub){
+ const t=TYPES[code];
+ return `<section class="card">
+ <div class="result-header">
+   <div class="result-code">TYPE ${code}</div>
+   <h2 class="result-title">${t[0]}</h2>
+ </div>
+ <p class="tagline">「 ${t[1]} 」</p>
+ <p>${t[2]}</p>
+ <div class="meaning"><strong>💖 あなたにとってメンカラとは？</strong><br>→ ${t[3]}</div>
+ ${sub?`<div class="meaning"><strong>⚡️️ メンカラ変化タイプ</strong><br><strong>${SUB[sub][0]}</strong><br>${SUB[sub][1]}</div>`:""}
+ <div class="buttons">
+ <button onclick="shareX()">X (旧Twitter) で投稿する</button>
+ <button class="secondary" onclick="copyResult()">結果のリンクをコピー</button>
+ <button class="secondary" onclick="showStats()">みんなの結果を見る</button>
+ </div>
+ </section><div id="stats"></div>`;
+}
+let currentCode="", currentSub="";
+function renderQuiz(){
+ let h=`<form id="quiz">`;
+ QUESTIONS.forEach(([id,title,opts],i)=>{
+   h+=`<section class="card"><div class="qnum">QUESTION ${i+1}</div><div class="question">${title}</div>`+
+   opts.map((x,j)=>`<label class="option"><input type="radio" name="${id}" value="${j+1}"><span>${j+1}．${x}</span></label>`).join("")+
+   `</section>`;
+ });
+ h+=`<section class="card hidden" id="extraCard"><div class="qnum">CHECK</div><div class="question">${EXTRA[1]}</div>`+
+ EXTRA[2].map((x,j)=>`<label class="option"><input type="radio" name="extra" value="${j+1}"><span>${j+1}．${x}</span></label>`).join("")+
+ `</section>`;
+ h+=`<div class="card"><div id="error" class="error hidden"></div><button type="submit">診断結果を見る ✨</button></div></form>`;
+ document.getElementById("app").innerHTML=h;
+ document.querySelectorAll('input[name="q2"]').forEach(el=>el.addEventListener("change",()=>document.getElementById("extraCard").classList.toggle("hidden",Number(el.value)<4)));
+ document.getElementById("quiz").addEventListener("submit",e=>{
+   e.preventDefault();
+   const a=getAnswers(),err=validate(a);
+   const errEl = document.getElementById("error");
+   if(err){
+     errEl.textContent=err;
+     errEl.classList.remove("hidden");
+     return;
+   }
+   errEl.classList.add("hidden");
+   const code=calc(a);
+   const sub=a.q2>=4?a.extra:"";
+   showResult(code,sub,a);
+ });
+}
+function showResult(code,sub,a){
+ currentCode=code;currentSub=sub;history.replaceState({}, "", "?result="+code+(sub?`&sub=${sub}`:""));
+ document.getElementById("app").innerHTML=typePage(code,sub);
+ if(API_URL) sendStats(a,code,sub);
+ window.scrollTo({top:0, behavior:'smooth'});
+}
+async function sendStats(a,code,sub){
+ try{await fetch(API_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({q1:a.q1,q2:a.q2,q3:a.q3,q4:a.q4,q5:a.q5,extra:a.extra||null,resultType:code,subType:sub||null,createdAt:new Date().toISOString().slice(0,10)})});}catch(e){}
+}
+function shareX(){const t=TYPES[currentCode];const u=encodeURIComponent(location.href);const tx=encodeURIComponent(`メンカラメンタル診断をやってみた！「${t[0]}」でした✨ #メンカラメンタル診断`);window.open(`https://twitter.com/intent/tweet?text=${tx}&url=${u}`,"_blank");}
+async function copyResult(){try{await navigator.clipboard-writeText(location.href);alert("結果リンクをコピーしました！");}catch(e){prompt("このリンクをコピーしてください",location.href)}}
+async function showStats(){
+ const el=document.getElementById("stats");el.innerHTML=`<section class="card"><h2>みんなの結果</h2><p class="small">統計データを読み込んでいます...</p></section>`;
+ if(!API_URL){el.innerHTML=`<section class="card"><h2>みんなの結果</h2><p>統計機能を使うには、Google Apps Scriptの公開URLを設定してください。</p></section>`;return;}
+ try{const r=await fetch(API_URL+"?action=stats");const d=await r.json();renderStats(d)}catch(e){el.innerHTML=`<section class="card"><h2>みんなの結果</h2><p>統計データを読み込めませんでした。</p></section>`}
+}
+function renderStats(d){
+ const total=d.total||0;let h=`<section class="card"><h2>みんなの結果</h2><p>現在 <strong>${total.toLocaleString()}</strong> 人が診断しました！</p><div class="stat-grid">`;
+ Object.entries(d.results||{}).forEach(([code,n])=>h+=`<div class="stat"><strong>${total?Math.round(n/total*1000)/10:0}%</strong>${code}｜${TYPES[code]?.[0]||code}<br><span class="small">${n.toLocaleString()}人</span></div>`);
+ h+=`</div><p class="small" style="margin-top:12px;">回答データは診断結果の集計に使用しています。</p></section>`;document.getElementById("stats").innerHTML=h;
+}
+function load(){
+ const p=new URLSearchParams(location.search),code=p.get("result"),sub=p.get("sub");
+ if(code&&TYPES[code]){currentCode=code;currentSub=sub||"";document.getElementById("app").innerHTML=typePage(code,sub||"");}
+ else renderQuiz();
+}
+load();
+</script>
+</body>
+</html>
