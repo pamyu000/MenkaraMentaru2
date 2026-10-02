@@ -340,12 +340,16 @@ const TYPES = {
 "15": ["色と担当（推し）の分離型","担当（推し）は担当（推し）、色は色。","担当（推し）は大好き。でもメンカラを見ても必ずしも担当（推し）を連想するわけではないタイプ。「この色＝担当（推し）！」という結びつきは比較的ゆるめ。","担当（推し）とは別ジャンル"],
 "16": ["メンカラ一点集中型","色そのものより、“担当（推し）の色”であることが大事。","その色自体には特別な思い入れはないけれど、担当（推し）の色としては大切。担当（推し）が別の色になったら、その新しい色にも気持ちが移る可能性が高いタイプ。","担当（推し）を示す目印"]
 };
+
+// CHECK質問の選択肢(1〜7)に対応するサブタイプ表示
 const SUB = {
-4:["メンカラ反転型","好きだったはずなのに、見すぎて苦手になった"],
-5:["メンカラ飽和型","グッズも衣装も何もかもその色。もうお腹いっぱい。"],
-3:["メンカラ複雑型","その色を見ると担当（推し）を思い出す。でも、今はちょっと複雑。"],
-6:["メンカラ理由不明型","特に理由はないけど、気づいたら苦手になった。"],
-7:["メンカラその他型","その色が苦手になった理由は、ほかにある。"]
+1: ["メンカラ飽和型","見すぎてちょっとお腹いっぱいになってしまったタイプ"],
+2: ["メンカラ疲労型","グッズなどで大量にメンカラを浴びすぎて、少し疲れてしまったタイプ"],
+3: ["メンカラ複雑型","「担当（推し）の色」というイメージが強くなりすぎて戸惑っているタイプ"],
+4: ["メンカラ反転型","もともと好きだったのに、推し色として扱われることに抵抗を感じたタイプ"],
+5: ["メンカラ思い出型","担当（推し）との思い出や出来事がその色に結びついているタイプ"],
+6: ["メンカラ理由不明型","明確な理由はないけれど、自然と好みが変化したタイプ"],
+7: ["メンカラその他型","独自の理由やシチュエーションで色の好みが変化したタイプ"]
 };
 
 const QUESTIONS = [
@@ -367,30 +371,44 @@ function validate(a){
  if(a.q2>=4 && !a.extra) return "苦手になった理由も選んでください。";
  return "";
 }
+
 function calc(a){
- const q1=a.q1,q2=a.q2,q3=a.q3,q4=a.q4,q5=a.q5;
- if(q1<=2){
-   if(q2===1 && q4===1) return q1===1 && q3<=2 ? "01":"03";
-   if(q2<=2 && q4<=2) return q5===2 ? "02":"03";
-   if(q2===3 && q4>=3) return q4===3 ? "09":"11";
-   if(q4===1) return "12";
-   return q5===2 ? "04":"11";
+ const q1=a.q1, q2=a.q2, q3=a.q3, q4=a.q4, q5=a.q5;
+ 
+ // 1. もともと好きだったグループ (Q1 = 1:大好き, 2:好き)
+ if(q1 <= 2){
+   if(q2 === 1 && q4 === 1) return (q1 === 1 && q3 <= 2) ? "01" : "03";
+   if(q2 <= 2 && (q4 === 1 || q4 === 2)) return (q5 === 2 || q5 === 4) ? "02" : "03";
+   if(q2 <= 2 && q3 <= 2) return "10";
+   if(q2 === 3 && q3 <= 2) return (q4 === 3) ? "09" : "11";
+   if(q2 === 3 && q3 >= 3) return (q4 === 1) ? "12" : "04";
+   if(q2 >= 4) return "04";
+   return "02";
  }
- if(q1===3){
-   if(q2<=2 && q3<=2) return q4===1 ? "07":"05";
-   if(q2<=2 && q3>=3) return q4<=2 ? "06":"08";
-   if(q2===3) return q4===1 ? "16":(q5===2 ? "14":"08");
-   return q4<=2 ? "06":"15";
+ 
+ // 2. 普通だったグループ (Q1 = 3:何とも思ってなかった)
+ if(q1 === 3){
+   if(q2 <= 2 && q3 <= 2) return (q4 === 1) ? "07" : "05";
+   if(q2 <= 2 && q3 >= 3) return (q4 <= 2) ? "06" : "08";
+   if(q2 === 3) return (q4 === 1) ? "16" : ((q5 === 2 || q5 === 4) ? "14" : "08");
+   if(q2 >= 4) return "15";
+   return "05";
  }
- if(q1>=4){
-   if(q2<=2 && q3<=2) return q4===1 ? "13":"05";
-   if(q2===3) return q4<=2 ? "14":"15";
-   if(q2>=4) return q4<=2 ? "06":"16";
+ 
+ // 3. 苦手・嫌いだったグループ (Q1 = 4:あまり好きじゃない, 5:苦手)
+ if(q1 >= 4){
+   if(q2 <= 2 && q3 <= 2) return (q4 === 1) ? "13" : "05";
+   if(q2 <= 2 && q3 >= 3) return "06";
+   if(q2 === 3) return (q4 <= 2) ? "14" : "15";
+   if(q2 >= 4) return (q4 <= 2) ? "16" : "15";
+   return "13";
  }
+ 
  return "15";
 }
+
 function typePage(code, sub){
- const t=TYPES[code];
+ const t=TYPES[code] || TYPES["15"];
  return `<section class="card">
  <div class="result-header">
    <div class="result-code">TYPE ${code}</div>
@@ -399,7 +417,7 @@ function typePage(code, sub){
  <p class="tagline">「 ${t[1]} 」</p>
  <p>${t[2]}</p>
  <div class="meaning"><strong>💖 あなたにとってメンカラとは？</strong><br>→ ${t[3]}</div>
- ${sub?`<div class="meaning"><strong>⚡️️ メンカラ変化タイプ</strong><br><strong>${SUB[sub][0]}</strong><br>${SUB[sub][1]}</div>`:""}
+ ${sub && SUB[sub]?`<div class="meaning"><strong>⚡ メンカラ変化タイプ</strong><br><strong>${SUB[sub][0]}</strong><br>${SUB[sub][1]}</div>`:""}
  <div class="buttons">
  <button onclick="shareX()">X (旧Twitter) で投稿する</button>
  <button class="secondary" onclick="copyResult()">結果のリンクをコピー</button>
@@ -407,7 +425,9 @@ function typePage(code, sub){
  </div>
  </section><div id="stats"></div>`;
 }
+
 let currentCode="", currentSub="";
+
 function renderQuiz(){
  let h=`<form id="quiz">`;
  QUESTIONS.forEach(([id,title,opts],i)=>{
@@ -436,27 +456,41 @@ function renderQuiz(){
    showResult(code,sub,a);
  });
 }
+
 function showResult(code,sub,a){
  currentCode=code;currentSub=sub;history.replaceState({}, "", "?result="+code+(sub?`&sub=${sub}`:""));
  document.getElementById("app").innerHTML=typePage(code,sub);
  if(API_URL) sendStats(a,code,sub);
  window.scrollTo({top:0, behavior:'smooth'});
 }
+
 async function sendStats(a,code,sub){
  try{await fetch(API_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({q1:a.q1,q2:a.q2,q3:a.q3,q4:a.q4,q5:a.q5,extra:a.extra||null,resultType:code,subType:sub||null,createdAt:new Date().toISOString().slice(0,10)})});}catch(e){}
 }
-function shareX(){const t=TYPES[currentCode];const u=encodeURIComponent(location.href);const tx=encodeURIComponent(`メンカラメンタル診断をやってみた！「${t[0]}」でした✨ #メンカラメンタル診断`);window.open(`https://twitter.com/intent/tweet?text=${tx}&url=${u}`,"_blank");}
-async function copyResult(){try{await navigator.clipboard-writeText(location.href);alert("結果リンクをコピーしました！");}catch(e){prompt("このリンクをコピーしてください",location.href)}}
+
+function shareX(){const t=TYPES[currentCode]||TYPES["15"];const u=encodeURIComponent(location.href);const tx=encodeURIComponent(`メンカラメンタル診断をやってみた！「${t[0]}」でした✨ #メンカラメンタル診断`);window.open(`https://twitter.com/intent/tweet?text=${tx}&url=${u}`,"_blank");}
+
+async function copyResult(){
+ try{
+   await navigator.clipboard.writeText(location.href);
+   alert("結果リンクをコピーしました！");
+ }catch(e){
+   prompt("このリンクをコピーしてください",location.href);
+ }
+}
+
 async function showStats(){
  const el=document.getElementById("stats");el.innerHTML=`<section class="card"><h2>みんなの結果</h2><p class="small">統計データを読み込んでいます...</p></section>`;
  if(!API_URL){el.innerHTML=`<section class="card"><h2>みんなの結果</h2><p>統計機能を使うには、Google Apps Scriptの公開URLを設定してください。</p></section>`;return;}
  try{const r=await fetch(API_URL+"?action=stats");const d=await r.json();renderStats(d)}catch(e){el.innerHTML=`<section class="card"><h2>みんなの結果</h2><p>統計データを読み込めませんでした。</p></section>`}
 }
+
 function renderStats(d){
  const total=d.total||0;let h=`<section class="card"><h2>みんなの結果</h2><p>現在 <strong>${total.toLocaleString()}</strong> 人が診断しました！</p><div class="stat-grid">`;
  Object.entries(d.results||{}).forEach(([code,n])=>h+=`<div class="stat"><strong>${total?Math.round(n/total*1000)/10:0}%</strong>${code}｜${TYPES[code]?.[0]||code}<br><span class="small">${n.toLocaleString()}人</span></div>`);
  h+=`</div><p class="small" style="margin-top:12px;">回答データは診断結果の集計に使用しています。</p></section>`;document.getElementById("stats").innerHTML=h;
 }
+
 function load(){
  const p=new URLSearchParams(location.search),code=p.get("result"),sub=p.get("sub");
  if(code&&TYPES[code]){currentCode=code;currentSub=sub||"";document.getElementById("app").innerHTML=typePage(code,sub||"");}
